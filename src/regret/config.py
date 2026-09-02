@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
+import os
 from pathlib import Path
 
 from pydantic import Field, field_validator
@@ -16,11 +17,17 @@ class Settings(BaseSettings):
     )
 
     regret_env: str = "development"
-    regret_secret_key: str = Field(default="")
-    regret_encryption_key: str = Field(default="")
+    regret_secret_key: str = Field(
+        default_factory=lambda: os.environ.get("REGRET_SECRET_KEY") or "regret-production-default-secret-key-for-preview-builds"
+    )
+    regret_encryption_key: str = Field(
+        default_factory=lambda: os.environ.get("REGRET_ENCRYPTION_KEY") or "pqsQcKUmPP_JgkdCLMBKv6IOcc0b48EqoNijaMzDhO8="
+    )
     regret_public_url: str = "http://127.0.0.1:8000"
     regret_cors_origins: str = "http://127.0.0.1:5173,http://localhost:5173"
-    regret_database_url: str = "sqlite:///./data/regret.db"
+    regret_database_url: str = Field(
+        default_factory=lambda: "sqlite:////tmp/regret.db" if os.environ.get("VERCEL") else "sqlite:///./data/regret.db"
+    )
 
     regret_default_trading_environment: str = "paper"
     regret_live_trading_enabled: bool = False
