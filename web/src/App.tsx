@@ -46,48 +46,22 @@ function rememberAppPath(path: string) {
 
 export default function App() {
   const location = useLocation();
-  const [user, setUser] = useState<User | null>(null);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    api.get<{ user: User }>("/api/auth/me")
-      .then((r) => setUser(r.user))
-      .catch(() => setUser(null))
-      .finally(() => setReady(true));
-  }, []);
 
   useEffect(() => {
     rememberAppPath(location.pathname);
   }, [location.pathname]);
 
-  if (!ready) {
-    return (
-      <div className="page boot">
-        <img src="/mark.png" alt="" width={36} height={36} />
-        <p className="empty">Opening REGRET</p>
-      </div>
-    );
-  }
-
-  const home = lastAppPath();
-
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
-      <Route path="/login" element={user ? <Navigate to="/app" replace /> : <Auth mode="login" onAuth={setUser} />} />
-      <Route path="/register" element={user ? <Navigate to="/app" replace /> : <Auth mode="register" onAuth={setUser} />} />
-      <Route path="/app/*" element={user ? <Shell user={user} onLogout={() => setUser(null)} /> : <Navigate to="/login" replace />} />
+      <Route path="/login" element={<Navigate to="/app" replace />} />
+      <Route path="/register" element={<Navigate to="/app" replace />} />
+      <Route path="/app/*" element={<Shell />} />
     </Routes>
   );
 }
 
-function Shell({ user, onLogout }: { user: User; onLogout: () => void }) {
-  const navigate = useNavigate();
-  async function logout() {
-    await api.post("/api/auth/logout");
-    onLogout();
-    navigate("/");
-  }
+function Shell() {
   return (
     <div className="shell">
       <nav className="mobile-nav">
@@ -115,12 +89,9 @@ function Shell({ user, onLogout }: { user: User; onLogout: () => void }) {
           </NavLink>
         ))}
         <div className="grow" />
-        <NavLink to="/app/settings">
-          <span className="idx">··</span>
-          <span>Settings</span>
-        </NavLink>
-        <div className="who">{user.display_name || user.email}<br />{user.email}</div>
-        <button className="btn" onClick={logout}>Sign out</button>
+        <div className="who" style={{ fontSize: "11px", color: "var(--muted)", padding: "8px 0" }}>
+          Alpaca Paper Trading<br /><span className="mono">PA3XUIGQ0VGB</span>
+        </div>
       </aside>
 
       <main className="page">
@@ -140,3 +111,4 @@ function Shell({ user, onLogout }: { user: User; onLogout: () => void }) {
     </div>
   );
 }
+
