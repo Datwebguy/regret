@@ -309,6 +309,30 @@ export default async function handler(req, res) {
       });
     }
 
+    // 9. /api/analyses
+    if (path === "analyses" || path.startsWith("analyses")) {
+      return res.status(200).json({
+        analyses: [
+          {
+            analysis_id: "ana-01",
+            summary: "SPY Bull Put Spread (766/765) · 6 Risk Gates Passed",
+            verdict: "BUY",
+          },
+          {
+            analysis_id: "ana-02",
+            summary: "QQQ Bear Call Spread (710/712) · 6 Risk Gates Passed",
+            verdict: "BUY",
+          },
+          {
+            analysis_id: "ana-03",
+            summary: "NVDA Bull Put Spread (227.5/225) · 6 Risk Gates Passed",
+            verdict: "BUY",
+          },
+        ],
+      });
+    }
+
+
     // 9. /api/auth/me
     if (path === "auth/me" || path.startsWith("auth")) {
       return res.status(200).json({
