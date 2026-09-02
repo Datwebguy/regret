@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy · REGRET</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/legal.css" />
+  </head>
+  <body>
+    <header class="mast">
+      <a href="/" class="brand"><img src="/mark.png" alt="" width="32" height="32" /><span class="wordmark">RE<i>GRET</i></span></a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/terms">Terms of Use</a>
+        <a href="/privacy" aria-current="page">Privacy Policy</a>
+      </nav>
+    </header>
+    <main class="legal">
+      <div class="eyebrow">Privacy Policy</div>
+      <h1>What REGRET keeps, and what it does not.</h1>
+      <p class="lede">
+        This policy describes the REGRET service at
+        <a href="https://regret.fly.dev">https://regret.fly.dev</a>. It is written
+        to match the product as it runs today, not a hypothetical future.
+      </p>
+      <p class="meta">Effective 13 August 2026 · Operator of the REGRET service</p>
+
+      <div class="notice">
+        REGRET is a decision product. Your REGRET login is not an Alpaca account.
+        Brokerage data is requested only after you connect your own Alpaca account.
+      </div>
+
+      <h2>1. Who this covers</h2>
+      <p>
+        This policy applies to people who visit the public site, create a REGRET
+        account, or connect a brokerage through REGRET. It is written by the
+        operator of the REGRET service. It is not Alpaca’s privacy policy. When you
+        use Alpaca, Alpaca’s own policy also applies.
+      </p>
+
+      <h2>2. What we collect</h2>
+      <p>If you only visit public pages, the host may see ordinary request metadata (IP address, time, path, user agent).</p>
+      <p>If you create a REGRET account, we store:</p>
+      <ul>
+        <li>email address, normalized to lowercase;</li>
+        <li>a password hash (bcrypt). The password itself is not stored;</li>
+        <li>an optional display name;</li>
+        <li>preferences you set, such as default trading environment and whether monitoring is on;</li>
+        <li>content you create in the product: rules, analyses, journal entries, trade intents, approvals, and order records REGRET placed for you.</li>
+      </ul>
+      <p>If you sign in, we also process:</p>
+      <ul>
+        <li>a session cookie named <code>regret_session</code>;</li>
+        <li>the user agent string, stored with the session;</li>
+        <li>client IP, used to rate-limit failed sign-in and registration abuse. On Fly.io we use the trusted <code>Fly-Client-IP</code> header, not spoofable <code>X-Forwarded-For</code>.</li>
+      </ul>
+      <p>If you connect Alpaca, we store:</p>
+      <ul>
+        <li>OAuth access and refresh tokens, or API keys you paste, encrypted at rest;</li>
+        <li>environment (paper or live), connection method, granted scopes, status;</li>
+        <li>Alpaca account identifiers returned by Alpaca for that connection;</li>
+        <li>short-lived OAuth state used only to complete the redirect.</li>
+      </ul>
+      <p>
+        We keep an internal audit log of account and connection events (for example
+        registration, session created or revoked, brokerage connected). Passwords and
+        raw tokens are not written to that log.
+      </p>
+
+      <h2>3. What we do not collect or invent</h2>
+      <ul>
+        <li>We do not store your password in a recoverable form.</li>
+        <li>We do not send Alpaca tokens or API secrets to the browser.</li>
+        <li>We do not sell your personal information.</li>
+        <li>We do not use advertising cookies or third-party ad networks.</li>
+        <li>We do not invent market or account figures. Missing data is shown as missing.</li>
+      </ul>
+
+      <h2>4. How we use the information</h2>
+      <ul>
+        <li>to operate your REGRET account and keep you signed in;</li>
+        <li>to analyze a trade you submit, evaluate your rules, and show a verdict;</li>
+        <li>to read your connected Alpaca account and market data when that is required for the action you asked for;</li>
+        <li>to submit an order only after your explicit confirmation;</li>
+        <li>to prevent abuse (rate limits on login and registration);</li>
+        <li>to isolate one user’s data from another’s.</li>
+      </ul>
+      <p>
+        The public deployment does not currently have a language-model provider
+        configured. If one is configured later, text you submit for analysis may be
+        sent to that provider in order to produce commentary. Deterministic checks
+        do not depend on a model.
+      </p>
+
+      <h2>5. Cookies and browser storage</h2>
+      <p>
+        After you sign in or register in the browser, REGRET sets
+        <code>regret_session</code>: HttpOnly, Secure on the production site,
+        SameSite=Lax, path <code>/</code>, lifetime 7 days. The raw value is hashed
+        (SHA-256) before it is stored. The web app does not keep a session token in
+        <code>localStorage</code>.
+      </p>
+      <p>
+        Command-line and MCP clients may receive a bearer token instead of relying
+        on a browser cookie. You are responsible for where you store that token.
+      </p>
+
+      <h2>6. Who else can see data</h2>
+      <ul>
+        <li><strong>Fly.io</strong> hosts the application and the data volume in the United States (currently Ashburn, <code>iad</code>).</li>
+        <li><strong>Alpaca</strong> receives OAuth and API traffic when you connect or when REGRET reads your account, market data, or submits an order you confirmed.</li>
+        <li><strong>Google Fonts</strong> may receive your IP address when a page loads typefaces from fonts.googleapis.com and fonts.gstatic.com.</li>
+      </ul>
+      <p>
+        We do not share your REGRET account with other REGRET users. One user cannot
+        confirm another user’s order or see another user’s Alpaca connection.
+      </p>
+
+      <h2>7. How long we keep it</h2>
+      <p>
+        Account, rules, analyses, journal, and connection records are kept while the
+        account exists. Sessions expire after 7 days or when you sign out. Short-lived
+        OAuth state expires in minutes. Login and registration rate-limit counters
+        live in memory on the application process and reset if that process restarts.
+      </p>
+      <p>
+        Disconnecting a brokerage removes the stored Alpaca credentials for that
+        environment. It does not erase analyses or journal entries you already created.
+      </p>
+
+      <h2>8. Your choices</h2>
+      <ul>
+        <li>You can use Analyze without connecting a brokerage.</li>
+        <li>You can disconnect Alpaca in Settings.</li>
+        <li>You can sign out, which revokes the current session.</li>
+        <li>You can refuse cookies by not signing in; the product then cannot keep you authenticated in the browser.</li>
+      </ul>
+      <p>
+        There is not yet a self-serve account-deletion control. To request deletion
+        of your REGRET account and the records stored with it, contact the operator
+        using the email on your account or the contact details on the Alpaca Connect
+        application for REGRET. We will say what we can delete and what brokerage
+        records remain at Alpaca, which we do not control.
+      </p>
+
+      <h2>9. Children</h2>
+      <p>
+        REGRET is not directed at children. You must be at least 18 to create an
+        account.
+      </p>
+
+      <h2>10. Security</h2>
+      <p>
+        Passwords are hashed with bcrypt. Session tokens are hashed at rest. Alpaca
+        credentials are encrypted. Browser login responses do not include a raw
+        session token. These are current engineering controls. They are not a
+        certification, and no internet service is free of risk.
+      </p>
+
+      <h2>11. Changes</h2>
+      <p>
+        If this policy changes in a material way, the effective date at the top of
+        this page will change.
+      </p>
+
+      <h2>12. Contact</h2>
+      <p>
+        Privacy questions: use the contact details submitted with the Alpaca Connect
+        application for REGRET, or the email address on your REGRET account. Service
+        address: <a href="https://regret.fly.dev">https://regret.fly.dev</a>.
+      </p>
+      <p>Related: <a href="/terms">Terms of Use</a>.</p>
+
+      <footer class="colophon">
+        <a href="/">REGRET</a>
+        <span><a href="/terms">Terms</a> · <a href="/privacy">Privacy</a></span>
+      </footer>
+    </main>
+  </body>
+</html>

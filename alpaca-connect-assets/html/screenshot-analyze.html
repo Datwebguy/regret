@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      html, body { margin: 0; width: 1024px; height: 500px; overflow: hidden; }
+      body { background: #e9e1cf; color: #1a1612; font-family: "IBM Plex Sans", "Segoe UI", sans-serif; display: grid; grid-template-columns: 200px 1fr; }
+      .spine { background: #241e18; color: #efe6d2; padding: 22px 16px; }
+      .wordmark { font-family: "Fraunces", serif; font-size: 18px; font-weight: 600; letter-spacing: 0.22em; margin-bottom: 28px; }
+      .wordmark i { font-style: italic; color: #d36a5f; font-weight: 500; }
+      .nav { color: #b3a68c; font-size: 13px; line-height: 2.05; }
+      .nav .on { color: #efe6d2; }
+      .idx { font-family: "IBM Plex Mono", monospace; font-size: 10px; color: #7d725e; margin-right: 8px; }
+      .page { padding: 26px 36px; }
+      .kicker { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8e2a24; margin: 0 0 6px; }
+      h1 { font-family: "Fraunces", serif; font-weight: 500; font-size: 34px; margin: 0 0 14px; }
+      .cols { display: grid; grid-template-columns: 1fr 220px; gap: 24px; }
+      .idea { background: #f4eee0; border: 1px solid #c4b79a; padding: 14px 16px; }
+      label { display: block; font-size: 12px; color: #7a7164; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+      .box { border: 1px solid #c4b79a; background: #e9e1cf; padding: 10px 12px; font-size: 15px; }
+      .btn { display: inline-block; background: #1a1612; color: #f4eee0; padding: 8px 14px; margin-top: 12px; }
+      .verdict { text-align: center; padding-top: 18px; }
+      .stamp {
+        display: inline-flex; justify-content: center; min-width: 140px;
+        border: 2px solid #8c6e2f; color: #8c6e2f; padding: 10px 14px;
+        font-family: "Fraunces", serif; font-weight: 600; letter-spacing: 0.16em; font-size: 28px;
+        transform: rotate(-5deg); background: rgba(244,238,224,0.7);
+      }
+      .verdict p { color: #4a4338; font-size: 13px; margin: 18px 12px 0; }
+    </style>
+  </head>
+  <body>
+    <aside class="spine">
+      <div class="wordmark">RE<i>GRET</i></div>
+      <div class="nav">
+        <div><span class="idx">01</span>Overview</div>
+        <div class="on"><span class="idx">02</span>Analyze</div>
+        <div><span class="idx">03</span>Setups</div>
+        <div><span class="idx">04</span>Portfolio</div>
+        <div><span class="idx">05</span>Rules</div>
+        <div><span class="idx">06</span>Journal</div>
+      </div>
+    </aside>
+    <main class="page">
+      <div class="kicker">Analyze</div>
+      <h1>Should you take this trade?</h1>
+      <div class="cols">
+        <section class="idea">
+          <label>The idea</label>
+          <div class="box">Buy $1,000 of NVDA. Stop 90. Target 130.</div>
+          <div class="btn">Ask REGRET</div>
+        </section>
+        <aside class="verdict">
+          <div class="stamp">WAIT</div>
+          <p>The idea may be sound. This is not the moment. REGRET does not send the order.</p>
+        </aside>
+      </div>
+    </main>
+  </body>
+</html>

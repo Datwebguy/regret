@@ -1,0 +1,42 @@
+# Fly.io production config for REGRET.
+# Secrets stay in `fly secrets`. Do not put OAuth client secrets here.
+
+app = "regret"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  REGRET_ENV = "production"
+  REGRET_PUBLIC_URL = "https://regret.fly.dev"
+  REGRET_CORS_ORIGINS = "https://regret.fly.dev"
+  REGRET_DATABASE_URL = "sqlite:////data/regret.db"
+  REGRET_DEFAULT_TRADING_ENVIRONMENT = "paper"
+  REGRET_LIVE_TRADING_ENABLED = "false"
+  ALPACA_OAUTH_REDIRECT_URI = "https://regret.fly.dev/api/alpaca/callback"
+  REGRET_WEB_DIST = "/app/web/dist"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [[http_service.checks]]
+    grace_period = "20s"
+    interval = "15s"
+    method = "GET"
+    path = "/api/health"
+    timeout = "5s"
+
+[mounts]
+  source = "regret_data"
+  destination = "/data"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

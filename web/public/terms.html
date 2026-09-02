@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms of Use · REGRET</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/legal.css" />
+  </head>
+  <body>
+    <header class="mast">
+      <a href="/" class="brand"><img src="/mark.png" alt="" width="32" height="32" /><span class="wordmark">RE<i>GRET</i></span></a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/terms" aria-current="page">Terms of Use</a>
+        <a href="/privacy">Privacy Policy</a>
+      </nav>
+    </header>
+    <main class="legal">
+      <div class="eyebrow">Terms of Use</div>
+      <h1>The rules for using REGRET.</h1>
+      <p class="lede">
+        REGRET is a trading decision product. It is not a broker, not a bank, and not
+        an investment adviser. These terms describe the software at
+        <a href="https://regret.fly.dev">https://regret.fly.dev</a>.
+      </p>
+      <p class="meta">Effective 13 August 2026 · Operator of the REGRET service</p>
+
+      <div class="notice">
+        This page describes how the product works today. It is not personalized legal,
+        tax, or investment advice. If you need that, speak to a qualified professional.
+      </div>
+
+      <h2>1. What REGRET is</h2>
+      <p>
+        REGRET helps you decide whether a trade you are already considering is
+        consistent with current market data it can retrieve, rules you wrote, and —
+        if you connect a brokerage — your real account. It returns a structured
+        verdict: buy, wait, reduce, reject, or incomplete. It does not invent prices,
+        balances, orders, or fills. If a required source is unavailable, REGRET says so.
+      </p>
+      <p>
+        REGRET never sends an order on its own. An order can be submitted only after
+        you review a preview and explicitly confirm. The confirmation is yours.
+      </p>
+
+      <h2>2. What REGRET is not</h2>
+      <ul>
+        <li>REGRET is not a broker-dealer and does not open or custody a brokerage account.</li>
+        <li>REGRET is not an investment adviser and does not manage money for you.</li>
+        <li>REGRET is not a signal service and does not promise profit or loss avoidance.</li>
+        <li>A REGRET account is not an Alpaca account. Connecting a brokerage does not replace your REGRET login.</li>
+      </ul>
+      <p>
+        Brokerage services, when you use them, are provided by Alpaca (including
+        Alpaca Securities LLC and its affiliates, as applicable) under Alpaca’s own
+        agreements. You must already have, or independently create, an Alpaca account.
+      </p>
+
+      <h2>3. Eligibility and your account</h2>
+      <p>
+        You must be at least 18 years old and legally able to enter this agreement.
+        You are responsible for the accuracy of the email and other details you
+        provide, and for keeping your password secret.
+      </p>
+      <p>
+        Browser sessions use an HttpOnly cookie. Command-line and MCP access may use
+        a bearer token you store yourself. You must not share those credentials or
+        attempt to use another person’s account.
+      </p>
+
+      <h2>4. Analyzing without a brokerage</h2>
+      <p>
+        You may create a REGRET account and analyze an idea without connecting Alpaca.
+        In that mode REGRET cannot read your portfolio or send an order. Verdicts that
+        depend on account data will be incomplete or limited, and REGRET will not
+        pretend otherwise.
+      </p>
+
+      <h2>5. Connecting Alpaca</h2>
+      <p>
+        Connecting a brokerage is optional. The supported method is Alpaca Connect
+        (OAuth 2.0). REGRET requests only the scopes it uses: <code>data</code> and,
+        when you choose to allow orders, <code>trading</code>. REGRET does not request
+        <code>account:write</code>.
+      </p>
+      <p>
+        You authorize REGRET on Alpaca’s consent screen. REGRET stores the resulting
+        tokens encrypted, tied to your REGRET user, and does not send those secrets
+        back to the browser. You may disconnect in Settings, which removes the stored
+        credentials for that environment.
+      </p>
+      <p>
+        An advanced, operator-oriented path lets you save your own Alpaca API keys.
+        Those keys are also encrypted at rest, isolated to your user, and never shown
+        again. Do not paste a shared or third-party key.
+      </p>
+
+      <h2>6. Paper and live</h2>
+      <p>
+        Paper and live are separate environments. The current public deployment
+        defaults to paper and does not enable live order submission. A “submitted”
+        order is not the same thing as a fill. REGRET reports the status Alpaca
+        returns; it does not invent a fill.
+      </p>
+
+      <h2>7. Your rules, your confirmation</h2>
+      <p>
+        Trading rules, journal entries, and analyses you store belong to your REGRET
+        account. Deterministic checks can fail or return insufficient data. An
+        incomplete picture is not a buy. You remain responsible for every order you
+        confirm, including size, symbol, and timing.
+      </p>
+
+      <h2>8. Acceptable use</h2>
+      <p>You may not:</p>
+      <ul>
+        <li>attack, overload, or probe the service beyond ordinary use;</li>
+        <li>bypass login, session, or rate limits, or create accounts to evade them;</li>
+        <li>use REGRET to place orders in an account you are not authorized to use;</li>
+        <li>misrepresent REGRET as a broker, as guaranteed advice, or as a source of fabricated market data;</li>
+        <li>upload malware or attempt to extract another user’s data.</li>
+      </ul>
+      <p>
+        Login and registration are rate-limited. Repeated failed sign-in attempts may
+        temporarily block further tries from that email or network.
+      </p>
+
+      <h2>9. Availability</h2>
+      <p>
+        The service is provided as-is. Hosting, market data, and brokerage APIs can
+        fail or be delayed. REGRET may refuse an action, return incomplete, or be
+        temporarily unavailable. We may change, suspend, or discontinue features.
+      </p>
+
+      <h2>10. Liability</h2>
+      <p>
+        Trading involves risk of loss, including loss of principal. To the fullest
+        extent permitted by law, the operator of REGRET is not liable for trading
+        losses, missed trades, data delays, brokerage outages, or decisions you make
+        after using the product. If a jurisdiction does not allow some limitations,
+        those limitations apply only to the extent allowed.
+      </p>
+
+      <h2>11. Changes</h2>
+      <p>
+        If these terms change in a material way, the effective date at the top of
+        this page will change. Continued use after that date means you accept the
+        updated terms.
+      </p>
+
+      <h2>12. Contact</h2>
+      <p>
+        For questions about these terms, use the contact details submitted with the
+        Alpaca Connect application for REGRET, or the email address on your REGRET
+        account. The service is operated at
+        <a href="https://regret.fly.dev">https://regret.fly.dev</a>.
+      </p>
+      <p>Related: <a href="/privacy">Privacy Policy</a>.</p>
+
+      <footer class="colophon">
+        <a href="/">REGRET</a>
+        <span><a href="/terms">Terms</a> · <a href="/privacy">Privacy</a></span>
+      </footer>
+    </main>
+  </body>
+</html>

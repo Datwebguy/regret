@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      html, body { margin: 0; width: 1024px; height: 500px; overflow: hidden; }
+      body { background: #e9e1cf; color: #1a1612; font-family: "IBM Plex Sans", "Segoe UI", sans-serif; }
+      .mast {
+        display: flex; justify-content: space-between; align-items: baseline;
+        padding: 18px 36px 12px; border-bottom: 1px solid #c4b79a;
+      }
+      .wordmark {
+        font-family: "Fraunces", "Times New Roman", serif;
+        font-size: 20px; font-weight: 600; letter-spacing: 0.22em;
+      }
+      .wordmark i { font-style: italic; color: #8e2a24; font-weight: 500; }
+      nav { color: #4a4338; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+      .grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 36px; padding: 28px 36px; }
+      .kicker {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #8e2a24; margin: 0 0 12px;
+      }
+      h1 { font-family: "Fraunces", "Times New Roman", serif; font-weight: 500; font-size: 40px; line-height: 1.05; margin: 0 0 12px; }
+      .lede { color: #4a4338; font-size: 16px; max-width: 36ch; margin: 0 0 20px; }
+      .btn { display: inline-block; background: #1a1612; color: #f4eee0; padding: 9px 14px; }
+      .docket { background: #f4eee0; border: 1px solid #9e9176; padding: 16px 18px; position: relative; }
+      .docket::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #8e2a24; }
+      .row { display: grid; grid-template-columns: 86px 1fr; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px dashed #c4b79a; }
+      .row:last-child { border-bottom: 0; }
+      .stamp {
+        display: inline-flex; justify-content: center; min-width: 78px;
+        border: 2px solid currentColor; padding: 4px 6px;
+        font-family: "Fraunces", serif; font-weight: 600; letter-spacing: 0.14em; font-size: 13px;
+        transform: rotate(-6deg);
+      }
+      .BUY { color: #2a4638; } .WAIT { color: #8c6e2f; } .REDUCE { color: #7a3f1d; } .REJECT { color: #8e2a24; }
+      .row p { margin: 0; color: #4a4338; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <header class="mast">
+      <div class="wordmark">RE<i>GRET</i></div>
+      <nav>How it works · Sign in · Create account</nav>
+    </header>
+    <div class="grid">
+      <div>
+        <div class="kicker">A check before you trade</div>
+        <h1>Don't just ask what to trade. Ask if you should.</h1>
+        <p class="lede">REGRET sits between your idea and the order. It never sends an order on its own.</p>
+        <div class="btn">Analyze a trade</div>
+      </div>
+      <aside class="docket">
+        <div class="kicker">The four answers</div>
+        <div class="row"><span class="stamp BUY">BUY</span><p>The idea fits the data and the rules that could be checked.</p></div>
+        <div class="row"><span class="stamp WAIT">WAIT</span><p>The idea may be sound. This is not the moment.</p></div>
+        <div class="row"><span class="stamp REDUCE">REDUCE</span><p>The idea may be fine. The size is too large.</p></div>
+        <div class="row"><span class="stamp REJECT">REJECT</span><p>A rule, a risk limit, or missing data says no.</p></div>
+      </aside>
+    </div>
+  </body>
+</html>
