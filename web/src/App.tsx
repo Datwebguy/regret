@@ -1,8 +1,5 @@
-import { Navigate, NavLink, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { api } from "./api";
+import { Navigate, NavLink, Outlet, Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
-import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Analyze from "./pages/Analyze";
 import Portfolio from "./pages/Portfolio";
@@ -13,9 +10,6 @@ import Settings from "./pages/Settings";
 import Monitor from "./pages/Monitor";
 import { BrandMark, SiteFooter } from "./components/ui";
 
-type User = { id: string; email: string; display_name: string };
-
-const LAST_APP = "regret_last_app";
 const NAV = [
   { to: "/app", label: "Overview", idx: "01", end: true },
   { to: "/app/analyze", label: "Analyze", idx: "02" },
@@ -25,38 +19,25 @@ const NAV = [
   { to: "/app/journal", label: "Journal", idx: "06" },
 ];
 
-function lastAppPath(): string {
-  try {
-    const saved = sessionStorage.getItem(LAST_APP);
-    if (saved && saved.startsWith("/app")) return saved;
-  } catch {
-    /* private mode */
-  }
-  return "/app/analyze";
-}
-
-function rememberAppPath(path: string) {
-  if (!path.startsWith("/app")) return;
-  try {
-    sessionStorage.setItem(LAST_APP, path);
-  } catch {
-    /* private mode */
-  }
-}
-
 export default function App() {
-  const location = useLocation();
-
-  useEffect(() => {
-    rememberAppPath(location.pathname);
-  }, [location.pathname]);
-
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Navigate to="/app" replace />} />
       <Route path="/register" element={<Navigate to="/app" replace />} />
-      <Route path="/app/*" element={<Shell />} />
+      <Route path="/app" element={<Shell />}>
+        <Route index element={<Dashboard />} />
+        <Route path="analyze" element={<Analyze />} />
+        <Route path="setups" element={<Setups />} />
+        <Route path="portfolio" element={<Portfolio />} />
+        <Route path="rules" element={<Rules />} />
+        <Route path="journal" element={<Journal />} />
+        <Route path="monitor/:symbol" element={<Monitor />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="settings/:section" element={<Settings />} />
+        <Route path="*" element={<Navigate to="/app" replace />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
@@ -95,20 +76,9 @@ function Shell() {
       </aside>
 
       <main className="page">
-        <Routes>
-          <Route index element={<Dashboard />} />
-          <Route path="analyze" element={<Analyze />} />
-          <Route path="setups" element={<Setups />} />
-          <Route path="portfolio" element={<Portfolio />} />
-          <Route path="rules" element={<Rules />} />
-          <Route path="journal" element={<Journal />} />
-          <Route path="monitor/:symbol" element={<Monitor />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="settings/:section" element={<Settings />} />
-        </Routes>
+        <Outlet />
         <SiteFooter />
       </main>
     </div>
   );
 }
-
