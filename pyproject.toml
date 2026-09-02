@@ -52,5 +52,6 @@ line-length = 100
 target-version = "py311"
 
 [tool.vercel]
-entrypoint = "src/regret/api/main.py"
+entrypoint = "src.regret.api.main:app"
+
 
