@@ -28,9 +28,28 @@ htmlcov/
 regret.db
 data/
 
-# User credentials (never commit)
+# User credentials & tokens (never commit)
 .regret/
 credentials.json
+*.pem
+*.key
+
+# Internal documentation & hackathon submission notes (keep private)
+HACKATHON_SUBMISSION.md
+HACKATHON_WORKLOG.md
+HANDOVER.md
+OPERATOR_CHECKLIST.md
+README_HACKATHON.md
+SESSION_SUMMARY.md
+STATUS_REPORT.md
+VALIDATION_WORKFLOW.md
+DESIGN.md
+AGENT_CONTINUATION_GUIDE.md
+.claude/
+skills-lock.json
+pitch_deck.html
+REGRET_Slide_Presentation.pdf
+*.pdf
 
 # Node
 web/node_modules/

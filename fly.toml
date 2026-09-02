@@ -1,7 +1,7 @@
 # Fly.io production config for REGRET.
 # Secrets stay in `fly secrets`. Do not put OAuth client secrets here.
 
-app = "regret"
+app = "regret-agent"
 primary_region = "iad"
 
 [build]
@@ -9,12 +9,12 @@ primary_region = "iad"
 
 [env]
   REGRET_ENV = "production"
-  REGRET_PUBLIC_URL = "https://regret.fly.dev"
-  REGRET_CORS_ORIGINS = "https://regret.fly.dev"
+  REGRET_PUBLIC_URL = "https://regret-agent.fly.dev"
+  REGRET_CORS_ORIGINS = "https://regret-agent.fly.dev"
   REGRET_DATABASE_URL = "sqlite:////data/regret.db"
   REGRET_DEFAULT_TRADING_ENVIRONMENT = "paper"
   REGRET_LIVE_TRADING_ENABLED = "false"
-  ALPACA_OAUTH_REDIRECT_URI = "https://regret.fly.dev/api/alpaca/callback"
+  ALPACA_OAUTH_REDIRECT_URI = "https://regret-agent.fly.dev/api/alpaca/callback"
   REGRET_WEB_DIST = "/app/web/dist"
 
 [http_service]
