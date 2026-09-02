@@ -65,12 +65,21 @@ export default function Landing() {
   }, []);
 
   const startingBalance = 100000;
-  const equity = stats?.current_equity ?? 99856.75;
-  const netPl = stats?.net_pl_dollars ?? (equity - startingBalance);
-  const netPlPct = stats?.net_pl_percent ?? ((netPl / startingBalance) * 100);
+  const equity = stats?.current_equity ?? 100002.69;
+  const netPl = stats?.net_pl_dollars ?? 2.69;
+  const netPlPct = stats?.net_pl_percent ?? 0.0027;
   const tradesCount = stats?.total_trades_executed ?? 5;
-  const positions = stats?.positions_detail ?? [];
-  const positionsCount = stats?.open_positions_count ?? (positions.length || 10);
+  const positions = stats?.positions_detail ?? [
+    { symbol: "SPY260902C00766000", side: "short", qty: "-1", avg_entry_price: "0.79", current_price: "0.25", unrealized_pl: "54" },
+    { symbol: "SPY260902C00767000", side: "long", qty: "1", avg_entry_price: "0.46", current_price: "0.06", unrealized_pl: "-40" },
+    { symbol: "QQQ260902C00710000", side: "short", qty: "-1", avg_entry_price: "1.12", current_price: "0.36", unrealized_pl: "76" },
+    { symbol: "QQQ260902C00711000", side: "long", qty: "1", avg_entry_price: "0.76", current_price: "0.11", unrealized_pl: "-65" },
+    { symbol: "IWM260902C00294000", side: "short", qty: "-1", avg_entry_price: "0.22", current_price: "0.15", unrealized_pl: "7" },
+    { symbol: "IWM260902C00295000", side: "long", qty: "1", avg_entry_price: "0.07", current_price: "0.00", unrealized_pl: "-7" },
+    { symbol: "NVDA260902C00227500", side: "long", qty: "1", avg_entry_price: "0.09", current_price: "0.01", unrealized_pl: "-8" },
+    { symbol: "AAPL260902C00327500", side: "long", qty: "1", avg_entry_price: "0.16", current_price: "0.00", unrealized_pl: "-16" },
+  ];
+  const positionsCount = stats?.open_positions_count ?? positions.length;
   const spreadCount = Math.min(5, Math.ceil(positionsCount / 2));
 
   const handleCopyCardImage = async () => {
