@@ -206,3 +206,11 @@ class BrokerAdapter(ABC):
     @abstractmethod
     def get_clock(self) -> ClockInfo:
         ...
+
+    @abstractmethod
+    def close_position(self, symbol_or_asset_id: str, *, qty: str | None = None, percentage: str | None = None) -> OrderSnapshot:
+        ...
+
+    @abstractmethod
+    def close_all_positions(self, *, cancel_orders: bool = True) -> list[OrderSnapshot]:
+        ...

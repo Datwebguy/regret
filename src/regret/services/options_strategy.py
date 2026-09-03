@@ -108,6 +108,8 @@ class OptionsStrategyService:
         min_iv_rank: int = 75,
         portfolio_realized_loss: Decimal = Decimal("0"),
         current_open_positions: int = 0,
+        min_dte: int = 3,
+        max_dte: int = 45,
     ) -> dict:
         """
         Scan symbols for IV Rank opportunity and generate AI proposals.
@@ -119,6 +121,8 @@ class OptionsStrategyService:
             min_iv_rank: Minimum IV Rank threshold (0-100)
             portfolio_realized_loss: Cumulative loss today
             current_open_positions: Current number of open spreads
+            min_dte: Minimum days to expiration (avoids 0 DTE pin risk)
+            max_dte: Maximum days to expiration
             
         Returns:
             {
@@ -147,7 +151,12 @@ class OptionsStrategyService:
                     continue
                 
                 # Find candidates using real screener or fallback
-                candidates = self.screener.find_credit_spread_candidates(symbol, min_iv_rank=min_iv_rank)
+                candidates = self.screener.find_credit_spread_candidates(
+                    symbol,
+                    min_iv_rank=min_iv_rank,
+                    min_dte=min_dte,
+                    max_dte=max_dte,
+                )
                 if not candidates:
                     candidates = self._generate_mock_candidates(symbol, iv_metrics)
                 

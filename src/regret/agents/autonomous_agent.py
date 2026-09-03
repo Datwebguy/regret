@@ -39,12 +39,16 @@ class AgentConfig:
         default_factory=lambda: ["SPY", "QQQ", "IWM", "NVDA", "AAPL", "MSFT", "XSP", "SPX"]
     )
     min_iv_rank: int = 40
+    min_dte: int = 3
+    max_dte: int = 45
     max_loss_per_trade: Decimal = Decimal("500")
     max_daily_loss: Decimal = Decimal("2000")
     max_open_positions: int = 5
     contracts_per_trade: int = 1
     profit_target_pct: Decimal = Decimal("50")  # Close spread at 50% max profit
     stop_loss_mult: Decimal = Decimal("2.0")   # Close spread if loss >= 2x initial credit
+    auto_close_same_day_expiring: bool = True  # Auto-close 0 DTE options to prevent OCC assignment/pin risk
+    auto_liquidate_assigned_equities: bool = True # Auto-liquidate assigned stock to maintain pure defined risk
     poll_interval_seconds: int = 300
     environment: str = "paper"
 
@@ -162,6 +166,8 @@ class AutonomousOptionsAgent:
                 min_iv_rank=self.config.min_iv_rank,
                 portfolio_realized_loss=realized_loss_today,
                 current_open_positions=open_positions_count,
+                min_dte=self.config.min_dte,
+                max_dte=self.config.max_dte,
             )
 
             for scan in scan_result.get("scans", []):
@@ -246,32 +252,130 @@ class AutonomousOptionsAgent:
 
     def _manage_open_positions(self, positions: list[Any]) -> list[dict]:
         """
-        Evaluate active options positions for exit triggers:
-        - 50% max profit reached
-        - 2x credit stop loss triggered
-        - 1 DTE pin risk avoidance
+        Evaluate active options positions for exit triggers and safeguards:
+        1. Auto-liquidate unexpected assigned equity positions (stock assignment from expired short options)
+        2. Auto-close 0 DTE / same-day expiring option contracts before market close to eliminate pin risk
+        3. Take-profit execution (50% max profit target)
+        4. Stop-loss execution (2x credit stop loss)
         """
+        import re
+        from datetime import datetime, timezone
+
         actions = []
+        today = datetime.now(timezone.utc).date()
+
         for pos in positions:
-            sym = getattr(pos, "symbol", "") or pos.get("symbol", "")
-            unrealized_pl = float(getattr(pos, "unrealized_pl", 0) or 0)
-            market_val = float(getattr(pos, "market_value", 0) or 0)
-            
-            # Example rule: if unrealized P&L is up significantly, close position
-            if unrealized_pl > 50.0:  # e.g., profit target
+            sym = getattr(pos, "symbol", "") or (pos.get("symbol", "") if isinstance(pos, dict) else "")
+            qty = str(getattr(pos, "qty", "0") or (pos.get("qty", "0") if isinstance(pos, dict) else "0"))
+            asset_class = str(getattr(pos, "asset_class", "") or (pos.get("asset_class", "") if isinstance(pos, dict) else ""))
+            unrealized_pl = float(getattr(pos, "unrealized_pl", 0) or (pos.get("unrealized_pl", 0) if isinstance(pos, dict) else 0) or 0)
+            market_val = float(getattr(pos, "market_value", 0) or (pos.get("market_value", 0) if isinstance(pos, dict) else 0) or 0)
+
+            # Skip if a closing order is already pending in the market
+            qty_avail = getattr(pos, "qty_available", None) or (pos.get("qty_available") if isinstance(pos, dict) else None)
+            if qty_avail is not None and float(qty_avail) == 0:
                 actions.append({
                     "symbol": sym,
-                    "action": "TAKE_PROFIT_TRIGGERED",
+                    "action": "PENDING_CLOSING_ORDER_IN_PROGRESS",
                     "unrealized_pl": unrealized_pl,
                     "market_value": market_val,
                 })
-            elif unrealized_pl < -150.0:  # stop loss
-                actions.append({
-                    "symbol": sym,
-                    "action": "STOP_LOSS_TRIGGERED",
-                    "unrealized_pl": unrealized_pl,
-                    "market_value": market_val,
-                })
+                continue
+
+            # 1. Check if this is an equity stock position (assigned shares)
+            is_equity = (asset_class == "us_equity") or (not re.search(r"\d{6}[CP]\d{8}", sym) and len(sym) <= 5)
+
+            if is_equity:
+                if self.config.auto_liquidate_assigned_equities:
+                    try:
+                        self.broker.close_position(sym)
+                        actions.append({
+                            "symbol": sym,
+                            "action": "ASSIGNED_EQUITY_AUTO_LIQUIDATED",
+                            "reason": f"Liquidated {qty} assigned shares to prevent directional pin/overnight risk",
+                            "unrealized_pl": unrealized_pl,
+                            "market_value": market_val,
+                        })
+                        logger.warning(f"[SAFEGUARD] Auto-liquidated assigned equity position {sym} ({qty} shares).")
+                    except Exception as exc:
+                        actions.append({
+                            "symbol": sym,
+                            "action": "ASSIGNED_EQUITY_LIQUIDATION_FAILED",
+                            "error": str(exc),
+                        })
+                else:
+                    actions.append({
+                        "symbol": sym,
+                        "action": "ASSIGNED_EQUITY_DETECTED",
+                        "unrealized_pl": unrealized_pl,
+                        "market_value": market_val,
+                    })
+                continue
+
+            # 2. Parse option expiration date (OCC format: SYMBOL + YYMMDD + C/P + STRIKE)
+            opt_match = re.search(r"(\d{6})[CP]\d{8}", sym)
+            dte = None
+            if opt_match:
+                try:
+                    exp_date = datetime.strptime(f"20{opt_match.group(1)}", "%Y%m%d").date()
+                    dte = (exp_date - today).days
+                except ValueError:
+                    pass
+
+            # 3. Expiration Pin Risk Protection (0 DTE / same day expiration)
+            if dte is not None and dte <= 0 and self.config.auto_close_same_day_expiring:
+                try:
+                    self.broker.close_position(sym)
+                    actions.append({
+                        "symbol": sym,
+                        "action": "EXPIRING_OPTION_PIN_RISK_AUTO_CLOSED",
+                        "reason": "Closed 0 DTE option prior to market close to prevent OCC assignment",
+                        "unrealized_pl": unrealized_pl,
+                        "market_value": market_val,
+                    })
+                    logger.info(f"[PIN-RISK] Auto-closed expiring option {sym} (0 DTE pin risk protection).")
+                except Exception as exc:
+                    actions.append({
+                        "symbol": sym,
+                        "action": "EXPIRATION_AUTO_CLOSE_FAILED",
+                        "error": str(exc),
+                    })
+                continue
+
+            # 4. Take Profit Trigger (e.g. +$50 / 50% max profit)
+            if unrealized_pl >= 50.0:
+                try:
+                    self.broker.close_position(sym)
+                    actions.append({
+                        "symbol": sym,
+                        "action": "TAKE_PROFIT_EXECUTED",
+                        "unrealized_pl": unrealized_pl,
+                        "market_value": market_val,
+                    })
+                    logger.info(f"[TAKE-PROFIT] Take-profit executed for {sym} (+${unrealized_pl:.2f}).")
+                except Exception as exc:
+                    actions.append({
+                        "symbol": sym,
+                        "action": "TAKE_PROFIT_FAILED",
+                        "error": str(exc),
+                    })
+            # 5. Stop Loss Trigger (e.g. -$150)
+            elif unrealized_pl <= -150.0:
+                try:
+                    self.broker.close_position(sym)
+                    actions.append({
+                        "symbol": sym,
+                        "action": "STOP_LOSS_EXECUTED",
+                        "unrealized_pl": unrealized_pl,
+                        "market_value": market_val,
+                    })
+                    logger.info(f"[STOP-LOSS] Stop-loss executed for {sym} (${unrealized_pl:.2f}).")
+                except Exception as exc:
+                    actions.append({
+                        "symbol": sym,
+                        "action": "STOP_LOSS_FAILED",
+                        "error": str(exc),
+                    })
             else:
                 actions.append({
                     "symbol": sym,
@@ -279,6 +383,7 @@ class AutonomousOptionsAgent:
                     "unrealized_pl": unrealized_pl,
                     "market_value": market_val,
                 })
+
         return actions
 
     def run_forever(
@@ -375,6 +480,13 @@ class AutonomousOptionsAgent:
 
 if __name__ == "__main__":
     import sys
+    if hasattr(sys.stdout, "reconfigure"):
+        try:
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+            sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
     from regret.config import get_settings
     from regret.logging_utils import configure_logging
 
@@ -388,10 +500,12 @@ if __name__ == "__main__":
     config = AgentConfig(
         environment=settings.regret_default_trading_environment,
         min_iv_rank=40,
+        min_dte=3,
+        max_dte=45,
     )
-    print(f"🚀 Starting REGRET Autonomous Options Agent ({creds.environment})...")
-    print(f"📊 Tracking Symbols: {', '.join(config.symbols)} | Min IV Rank: {config.min_iv_rank}%")
-    print(f"⏱️  Loop Interval: {config.poll_interval_seconds}s. Press Ctrl+C to stop.\n")
+    print(f"[START] Starting REGRET Autonomous Options Agent ({creds.environment})...")
+    print(f"[CONFIG] Tracking Symbols: {', '.join(config.symbols)} | Min IV Rank: {config.min_iv_rank}% | Min DTE: {config.min_dte}")
+    print(f"[LOOP] Loop Interval: {config.poll_interval_seconds}s. Press Ctrl+C to stop.\n")
     agent = AutonomousOptionsAgent(creds, config=config)
     try:
         agent.run_forever(interval_seconds=config.poll_interval_seconds)

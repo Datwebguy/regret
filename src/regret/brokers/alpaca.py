@@ -377,6 +377,28 @@ class AlpacaBrokerAdapter(BrokerAdapter):
             raw={"is_open": data.get("is_open"), "timestamp": data.get("timestamp")},
         )
 
+    def close_position(
+        self,
+        symbol_or_asset_id: str,
+        *,
+        qty: str | None = None,
+        percentage: str | None = None,
+    ) -> OrderSnapshot:
+        params: dict[str, Any] = {}
+        if qty is not None:
+            params["qty"] = str(qty)
+        if percentage is not None:
+            params["percentage"] = str(percentage)
+        data, request_id = self._request("DELETE", f"/v2/positions/{symbol_or_asset_id}", params=params or None)
+        return _map_order(data, request_id)
+
+    def close_all_positions(self, *, cancel_orders: bool = True) -> list[OrderSnapshot]:
+        params = {"cancel_orders": cancel_orders}
+        data, request_id = self._request("DELETE", "/v2/positions", params=params)
+        if isinstance(data, list):
+            return [_map_order(item, request_id) for item in data]
+        return []
+
 
 def _map_order(data: dict[str, Any], request_id: str) -> OrderSnapshot:
     return OrderSnapshot(

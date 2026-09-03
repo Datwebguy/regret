@@ -277,6 +277,8 @@ class IVRankScreener:
         symbol: str,
         min_iv_rank: int = 50,
         target_short_delta: Decimal = Decimal("0.25"),
+        min_dte: int = 3,
+        max_dte: int = 45,
     ) -> list[CreditSpreadSetup]:
         """Find credit spread candidates (Bull Put Spreads and Bear Call Spreads)."""
         iv_metrics = self.calculate_iv_rank(symbol)
@@ -286,6 +288,24 @@ class IVRankScreener:
         candidates = []
         stock_px = iv_metrics.stock_price
         
+        from datetime import datetime, timezone
+        today = datetime.now(timezone.utc).date()
+        
+        def _filter_target_exp(expirations_list: list[str]) -> str | None:
+            valid_targets = []
+            for exp in sorted(expirations_list):
+                try:
+                    exp_d = datetime.strptime(exp, "%Y-%m-%d").date()
+                    dte = (exp_d - today).days
+                    if min_dte <= dte <= max_dte:
+                        valid_targets.append((dte, exp))
+                except ValueError:
+                    continue
+            if valid_targets:
+                # Return the expiration closest to ~7-14 DTE, or first valid >= min_dte
+                return valid_targets[0][1]
+            return None
+        
         # 1. Generate Bull Put Spread candidate (Credit Put Spread)
         put_contracts = self._fetch_active_contracts(symbol, "put")
         real_put_pair = None
@@ -294,9 +314,9 @@ class IVRankScreener:
                 c for c in put_contracts
                 if c.get("strike_price") and c.get("symbol") and c.get("expiration_date")
             ]
-            expirations = sorted(list(set(c["expiration_date"] for c in valid_puts)))
-            if expirations:
-                target_exp = expirations[0]
+            all_expirations = sorted(list(set(c["expiration_date"] for c in valid_puts)))
+            target_exp = _filter_target_exp(all_expirations)
+            if target_exp:
                 exp_puts = sorted(
                     [c for c in valid_puts if c["expiration_date"] == target_exp],
                     key=lambda x: float(x["strike_price"]),
@@ -376,9 +396,9 @@ class IVRankScreener:
                 c for c in call_contracts
                 if c.get("strike_price") and c.get("symbol") and c.get("expiration_date")
             ]
-            expirations = sorted(list(set(c["expiration_date"] for c in valid_calls)))
-            if expirations:
-                target_exp = expirations[0]
+            all_call_expirations = sorted(list(set(c["expiration_date"] for c in valid_calls)))
+            target_exp = _filter_target_exp(all_call_expirations)
+            if target_exp:
                 exp_calls = sorted(
                     [c for c in valid_calls if c["expiration_date"] == target_exp],
                     key=lambda x: float(x["strike_price"]),
