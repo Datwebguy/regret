@@ -160,7 +160,30 @@ class AutonomousOptionsAgent:
                 status="halted_max_positions",
             )
 
-        # 4. Scan symbols for options opportunities
+        # 4. Check Market Hours (Only open new trades during regular market hours)
+        is_market_open = True
+        try:
+            clock = self.broker.get_clock()
+            is_market_open = bool(getattr(clock, "is_open", True))
+        except Exception:
+            pass
+
+        if not is_market_open:
+            return AgentCycleResult(
+                cycle_id=cycle_id,
+                timestamp=now_iso,
+                account_equity=account_equity,
+                buying_power=buying_power,
+                open_positions_count=open_positions_count,
+                scanned_symbols=self.config.symbols,
+                opportunities_found=[],
+                executed_trades=[],
+                managed_positions=managed_positions,
+                errors=errors,
+                status="market_closed",
+            )
+
+        # 5. Scan symbols for options opportunities
         try:
             scan_result = self.strategy_service.scan_and_propose(
                 symbols=self.config.symbols,

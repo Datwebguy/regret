@@ -298,30 +298,39 @@ class AlpacaBrokerAdapter(BrokerAdapter):
 
         # 2. Sequential fallback: Buy the Long protection leg FIRST so the short leg is covered
         orders = []
-        # Leg 1: Long hedge leg (Buy to open)
-        long_order = self.submit_option_order(
-            symbol=long_symbol,
-            qty=qty,
-            side="buy",
-            order_type="limit" if long_price else "market",
-            limit_price=long_price,
-            position_intent="buy_to_open",
-            client_order_id=f"{pfx}-long",
-        )
-        orders.append(long_order)
+        try:
+            # Leg 1: Long hedge leg (Buy to open)
+            long_order = self.submit_option_order(
+                symbol=long_symbol,
+                qty=qty,
+                side="buy",
+                order_type="limit" if long_price else "market",
+                limit_price=long_price,
+                position_intent="buy_to_open",
+                client_order_id=f"{pfx}-long",
+            )
+            orders.append(long_order)
 
-        # Leg 2: Short leg (Sell to open)
-        short_order = self.submit_option_order(
-            symbol=short_symbol,
-            qty=qty,
-            side="sell",
-            order_type="limit" if short_price else "market",
-            limit_price=short_price,
-            position_intent="sell_to_open",
-            client_order_id=f"{pfx}-short",
-        )
-        orders.append(short_order)
-        return orders
+            # Leg 2: Short leg (Sell to open)
+            short_order = self.submit_option_order(
+                symbol=short_symbol,
+                qty=qty,
+                side="sell",
+                order_type="limit" if short_price else "market",
+                limit_price=short_price,
+                position_intent="sell_to_open",
+                client_order_id=f"{pfx}-short",
+            )
+            orders.append(short_order)
+            return orders
+        except Exception as exc:
+            # Rollback: Cancel any submitted legs if the full spread failed to place
+            for o in orders:
+                try:
+                    self.cancel_order(o.id)
+                except Exception:
+                    pass
+            raise exc
 
     def cancel_order(self, order_id: str) -> None:
         self._request("DELETE", f"/v2/orders/{order_id}")
