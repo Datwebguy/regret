@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from decimal import Decimal
 import logging
+import re
 import time
 from typing import Any, Optional
 
@@ -170,13 +171,39 @@ class AutonomousOptionsAgent:
                 max_dte=self.config.max_dte,
             )
 
+            # Fetch currently active symbols with open orders or positions to avoid duplicate submissions
+            active_symbols = set()
+            try:
+                open_orders = self.broker.get_orders(status="open")
+                for o in open_orders:
+                    o_sym = str(getattr(o, "symbol", "") or "")
+                    active_symbols.add(o_sym)
+                    base_m = re.match(r"^([A-Za-z]+)\d{6}", o_sym)
+                    if base_m:
+                        active_symbols.add(base_m.group(1).upper())
+            except Exception:
+                pass
+
+            for p in positions:
+                p_sym = str(getattr(p, "symbol", "") or (p.get("symbol", "") if isinstance(p, dict) else ""))
+                active_symbols.add(p_sym)
+                base_m = re.match(r"^([A-Za-z]+)\d{6}", p_sym)
+                if base_m:
+                    active_symbols.add(base_m.group(1).upper())
+
             for scan in scan_result.get("scans", []):
                 if scan.get("opportunity") and "proposal" in scan:
                     opportunities.append(scan)
+                    prop_data = scan.get("proposal", {})
+                    prop_sym = prop_data.get("symbol", "").upper()
+
+                    # Skip if an order or position already exists for this underlying ticker
+                    if prop_sym in active_symbols:
+                        continue
+
                     # 5. Autonomous Execution for approved proposals
                     validation = scan.get("validation", {})
                     if validation.get("approved"):
-                        prop_data = scan.get("proposal", {})
                         # Build proposal object
                         proposal = OptionsProposal(
                             proposal_id=prop_data["proposal_id"],
@@ -222,6 +249,7 @@ class AutonomousOptionsAgent:
                             qty=self.config.contracts_per_trade,
                         )
                         executed_trades.append(exec_res)
+                        active_symbols.add(prop_sym)
                         open_positions_count += 1
                         if open_positions_count >= self.config.max_open_positions:
                             break
