@@ -2,10 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { BrandMark, SiteFooter, Stamp } from "../components/ui";
-import RiskGateProbe from "../components/RiskGateProbe";
-import VolatilityRegimeMatrix from "../components/VolatilityRegimeMatrix";
-import DecisionStream from "../components/DecisionStream";
-import StructuresBook from "../components/StructuresBook";
 
 interface PositionDetail {
   symbol: string;
@@ -141,15 +137,14 @@ export default function Landing() {
         <BrandMark />
         <nav className="mast-actions">
           <a href="#live-card" className="mast-quiet">Leaderboard</a>
-          <a href="#risk-gate-probe" className="mast-quiet">Risk Probe</a>
-          <a href="#volatility-regime" className="mast-quiet">IV Regime</a>
-          <a href="#structures-book" className="mast-quiet">Structures</a>
-          <a href="#decision-stream" className="mast-quiet">Decision Stream</a>
-          <Link to="/app" className="btn primary mast-cta">Open Terminal</Link>
+          <a href="#pillars" className="mast-quiet">Architecture</a>
+          <a href="#how" className="mast-quiet">How it works</a>
+          <Link to="/app" className="btn primary mast-cta">Launch App</Link>
         </nav>
       </header>
 
       <div className="landing">
+        {/* Hero Section with Live Telemetry Card */}
         <section className="hero-grid">
           <div>
             <div className="eyebrow">Alpaca AI Trading Agents Hackathon 2026</div>
@@ -158,12 +153,12 @@ export default function Landing() {
               High-probability defined-risk credit spreads pairing <strong>Featherless.ai</strong> open-source market reasoning with <strong>6 deterministic Python risk gates</strong> on Alpaca Paper Trading.
             </p>
             <div className="actions">
-              <a className="btn primary" href="#live-card">View Live Trading Card</a>
+              <Link className="btn primary" to="/app">Launch Live Desk</Link>
               <a className="btn" href="#how">How it works</a>
             </div>
           </div>
 
-          {/* Deflow-inspired Live Telemetry Card with Direct Image Export */}
+          {/* Live Telemetry Card with Direct Image Export */}
           <aside
             id="live-card"
             ref={cardRef}
@@ -275,7 +270,7 @@ export default function Landing() {
               <span>{lastSync ? `Synced: ${lastSync}` : "Live"}</span>
             </div>
 
-            {/* Social Share & Image Export Buttons Toolbar - Ignored in image capture */}
+            {/* Social Share & Image Export Buttons Toolbar */}
             <div data-html2canvas-ignore="true" style={{ marginTop: "16px", display: "flex", gap: "8px", flexWrap: "wrap" }}>
               <button
                 onClick={handleCopyCardImage}
@@ -330,21 +325,74 @@ export default function Landing() {
           </aside>
         </section>
 
-        {/* Interactive Risk Gate Sandbox */}
-        <RiskGateProbe />
+        {/* 3 Core Architectural Pillars */}
+        <section id="pillars" style={{ marginTop: "50px", borderTop: "1px solid var(--rule)", paddingTop: "36px" }}>
+          <div className="eyebrow">Institutional Architecture</div>
+          <h2>Separation of AI Reasoning &amp; Deterministic Risk</h2>
+          <p style={{ color: "var(--muted)", maxWidth: "60ch", marginBottom: "24px" }}>
+            Probabilistic models formulate strategic setups; deterministic Python code owns 100% of mathematical limits and broker execution.
+          </p>
 
-        {/* 52-Week Volatility Regime Matrix */}
-        <VolatilityRegimeMatrix />
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: "16px",
+          }}>
+            <div style={{ background: "var(--sheet)", border: "1px solid var(--rule-strong)", borderRadius: "4px", padding: "20px" }}>
+              <div className="mono" style={{ fontSize: "11px", color: "var(--oxblood)", textTransform: "uppercase", fontWeight: 700 }}>Pillar 01</div>
+              <h3 style={{ fontSize: "18px", margin: "8px 0 6px" }}>Strategic Intelligence</h3>
+              <p style={{ fontSize: "13.5px", color: "var(--soft)", lineHeight: 1.5, margin: 0 }}>
+                Featherless.ai serverless models (Qwen 2.5 72B / Llama 3.3) synthesize macroeconomic regime, trend structure, and 52-week IV Rank to construct defined-risk Bull Put and Bear Call spreads.
+              </p>
+            </div>
 
-        {/* Defined-Risk Paired Structures Book */}
-        <StructuresBook />
+            <div style={{ background: "var(--sheet)", border: "1px solid var(--rule-strong)", borderRadius: "4px", padding: "20px" }}>
+              <div className="mono" style={{ fontSize: "11px", color: "var(--forest)", textTransform: "uppercase", fontWeight: 700 }}>Pillar 02</div>
+              <h3 style={{ fontSize: "18px", margin: "8px 0 6px" }}>6 Deterministic Gates</h3>
+              <p style={{ fontSize: "13.5px", color: "var(--soft)", lineHeight: 1.5, margin: 0 }}>
+                Zero model output touches the broker directly. Every proposal must clear hardcoded caps: $500 max loss, $2,000 daily halt, max 5 positions, positive Theta, Delta bounds, and 7-45 DTE.
+              </p>
+            </div>
 
-        {/* Live Decision Stream & Refusal Ledger */}
-        <DecisionStream />
+            <div style={{ background: "var(--sheet)", border: "1px solid var(--rule-strong)", borderRadius: "4px", padding: "20px" }}>
+              <div className="mono" style={{ fontSize: "11px", color: "var(--brass)", textTransform: "uppercase", fontWeight: 700 }}>Pillar 03</div>
+              <h3 style={{ fontSize: "18px", margin: "8px 0 6px" }}>Autonomous Lifecycle</h3>
+              <p style={{ fontSize: "13.5px", color: "var(--soft)", lineHeight: 1.5, margin: 0 }}>
+                Orders execute natively via Alpaca multi-leg routing. Active book management enforces automated exits at 50% profit target, 2.0x stop loss, and 1 DTE pin-risk protection.
+              </p>
+            </div>
+          </div>
+        </section>
 
+        {/* Live Terminal Invitation Banner */}
+        <section style={{
+          marginTop: "48px",
+          background: "var(--sheet)",
+          border: "1px solid var(--rule-strong)",
+          borderRadius: "6px",
+          padding: "24px 28px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "16px",
+        }}>
+          <div>
+            <div className="mono" style={{ fontSize: "11px", color: "var(--forest)", textTransform: "uppercase", fontWeight: 700 }}>Interactive Live Desk</div>
+            <h3 style={{ margin: "4px 0", fontSize: "20px" }}>Experience the Full Trading Terminal</h3>
+            <p style={{ margin: 0, color: "var(--soft)", fontSize: "13.5px", maxWidth: "55ch" }}>
+              Probe the deterministic risk gates, explore the 52-week IV regime surface, review paired structures, and inspect the real-time decision stream.
+            </p>
+          </div>
+          <Link to="/app" className="btn primary" style={{ padding: "12px 24px", fontWeight: 700 }}>
+            Launch Live Desk ↗
+          </Link>
+        </section>
+
+        {/* How it Works / System Architecture */}
         <section className="how" id="how" style={{ marginTop: "50px" }}>
-          <div className="eyebrow">System Architecture</div>
-          <h2>AI Intelligence + Deterministic Risk Execution.</h2>
+          <div className="eyebrow">System Workflow</div>
+          <h2>Autonomous AI Execution Pipeline</h2>
           <ol>
             {STEPS.map((step, i) => (
               <li key={step}>
@@ -360,5 +408,3 @@ export default function Landing() {
     </div>
   );
 }
-
-
