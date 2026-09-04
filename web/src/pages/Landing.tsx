@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { BrandMark, SiteFooter, Stamp } from "../components/ui";
+import RiskGateProbe from "../components/RiskGateProbe";
+import VolatilityRegimeMatrix from "../components/VolatilityRegimeMatrix";
+import DecisionStream from "../components/DecisionStream";
+import StructuresBook from "../components/StructuresBook";
 
 interface PositionDetail {
   symbol: string;
@@ -136,8 +140,11 @@ export default function Landing() {
       <header className="mast">
         <BrandMark />
         <nav className="mast-actions">
-          <a href="#live-card" className="mast-quiet">Live Leaderboard</a>
-          <a href="#how" className="mast-quiet">How it works</a>
+          <a href="#live-card" className="mast-quiet">Leaderboard</a>
+          <a href="#risk-gate-probe" className="mast-quiet">Risk Probe</a>
+          <a href="#volatility-regime" className="mast-quiet">IV Regime</a>
+          <a href="#structures-book" className="mast-quiet">Structures</a>
+          <a href="#decision-stream" className="mast-quiet">Decision Stream</a>
           <Link to="/app" className="btn primary mast-cta">Open Terminal</Link>
         </nav>
       </header>
@@ -323,45 +330,17 @@ export default function Landing() {
           </aside>
         </section>
 
+        {/* Interactive Risk Gate Sandbox */}
+        <RiskGateProbe />
 
-        {/* Live Positions Breakdown */}
-        <section style={{ marginTop: "40px" }}>
-          <div className="eyebrow">Active Multi-Leg Spreads</div>
-          <h2>Live Option Positions (SPY, QQQ, IWM, NVDA, AAPL)</h2>
-          <p style={{ color: "var(--muted)", marginBottom: "20px" }}>
-            Every spread executed by REGRET is fully covered by an outer long protective wing with strictly positive Theta decay.
-          </p>
-          <div style={{ overflowX: "auto", background: "var(--sheet)", border: "1px solid var(--rule)", borderRadius: "12px", padding: "16px" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "var(--mono)", fontSize: "13px" }}>
-              <thead>
-                <tr style={{ borderBottom: "1px solid var(--rule)", textAlign: "left", color: "var(--faint)" }}>
-                  <th style={{ padding: "8px 12px" }}>Contract</th>
-                  <th style={{ padding: "8px 12px" }}>Side</th>
-                  <th style={{ padding: "8px 12px" }}>Qty</th>
-                  <th style={{ padding: "8px 12px" }}>Entry Price</th>
-                  <th style={{ padding: "8px 12px" }}>Mark Price</th>
-                  <th style={{ padding: "8px 12px" }}>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {positions.slice(0, 10).map((p, idx) => (
-                  <tr key={idx} style={{ borderBottom: "1px solid var(--rule)" }}>
-                    <td style={{ padding: "10px 12px", fontWeight: "700" }}>{p.symbol}</td>
-                    <td style={{ padding: "10px 12px", textTransform: "uppercase", color: p.side.toLowerCase() === "long" ? "var(--forest)" : "var(--oxblood)" }}>
-                      {p.side}
-                    </td>
-                    <td style={{ padding: "10px 12px" }}>{p.qty}</td>
-                    <td style={{ padding: "10px 12px" }}>${parseFloat(p.avg_entry_price || "0").toFixed(2)}</td>
-                    <td style={{ padding: "10px 12px" }}>${parseFloat(p.current_price || "0").toFixed(2)}</td>
-                    <td style={{ padding: "10px 12px", color: "var(--forest)", fontWeight: "700" }}>
-                      {p.side.toLowerCase() === "long" ? "PROTECTED (Long Wing)" : "BOUNDED (Short Premium)"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+        {/* 52-Week Volatility Regime Matrix */}
+        <VolatilityRegimeMatrix />
+
+        {/* Defined-Risk Paired Structures Book */}
+        <StructuresBook />
+
+        {/* Live Decision Stream & Refusal Ledger */}
+        <DecisionStream />
 
         <section className="how" id="how" style={{ marginTop: "50px" }}>
           <div className="eyebrow">System Architecture</div>

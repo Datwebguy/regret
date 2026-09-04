@@ -24,14 +24,19 @@
 
 ## 🏛️ Executive Summary
 
-Most autonomous LLM trading agents fail in financial markets because large language models are probabilistic text generators. When granted direct broker execution authority, language models frequently hallucinate options Greeks, miscalculate margin collateral, and enter undefined-risk naked short positions that expose portfolios to catastrophic tail risk.
+REGRET is an Autonomous AI Options Trading Agent built for the Alpaca AI Trading Agents Hackathon. It solves the critical flaw of traditional AI trading bots — hallucinated entries and unbounded tail risk — by strictly separating AI strategic reasoning from deterministic risk execution.
 
-**REGRET** enforces an uncompromised separation of concerns:
+The system continuously scans liquid market underlyings (SPY, QQQ, NVDA, IWM) for elevated Implied Volatility regimes (IV Rank > 50%), where selling options premium offers a statistical edge. Using Featherless.ai serverless inference with open-source quantitative models (Qwen 2.5 72B / Llama 3.3), REGRET synthesizes macroeconomic context, trend structure, and volatility crush potential to formulate structured options credit spread setups (Bull Put Spreads & Bear Call Spreads).
 
-1. **Strategic Market Intelligence**: Serverless open reasoning models (e.g. Qwen 2.5 72B / Llama 3.3 via Featherless.ai) evaluate macro regime shifts, earnings calendars, and volatility skew.
-2. **Deterministic Risk Execution**: Hardened Python risk engines own 100% of mathematical validation, position sizing, strike selection, and atomic multi-leg order routing.
+Before any multi-leg order touches the brokerage, it must pass 100% of 6 code-enforced Deterministic Risk Gates in Python:
+1. **Max Loss Cap:** Hard cap at $500 max loss per trade (unbounded risk is mathematically impossible).
+2. **Daily Loss Halt:** Cumulative daily losses cannot exceed $2,000.
+3. **Position Ceiling:** Maximum 5 concurrent open option spreads.
+4. **Bid-Ask Health:** Rejects illiquid contracts exceeding 10% spread-to-credit ratio.
+5. **Greeks Sanity:** Enforces positive Theta ($\theta > 0$) and bounded Delta ($|\Delta| \le 0.40$).
+6. **Expiration Safety:** Limits DTE between 7 and 45 days to eliminate gamma explosions.
 
-Zero naked options. Zero tail risk. Every position is mathematically bounded before any order touches the broker.
+Approved trades are autonomously routed to Alpaca's Paper Trading API. The built-in Active Position Manager continuously monitors the book, executing automated exits at 50% profit target, 2.0x stop loss, or 1 DTE to eliminate pin risk. REGRET provides full CLI tooling, MCP server endpoints, and an interactive Web Dashboard tracking real-time performance on a $100,000 paper trading baseline.
 
 ---
 
