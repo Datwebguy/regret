@@ -35,6 +35,16 @@ Zero naked options. Zero tail risk. Every position is mathematically bounded bef
 
 ---
 
+## 🏆 Lablab.ai Alpaca Hackathon Submission Links
+
+* 🌐 **Live Web Application**: [https://regretagent.vercel.app](https://regretagent.vercel.app)
+* ⚡ **Live Backend API Engine**: [https://regret-agent.fly.dev](https://regret-agent.fly.dev)
+* 📄 **Official One-Page Write-Up**: [ONE_PAGE_WRITEUP.md](ONE_PAGE_WRITEUP.md)
+* 📊 **Verified Paper Trading Account ID**: `PA3XUIGQ0VGB` (\$100,000 Baseline)
+* 🧪 **Automated Test Suite**: 98 Passing Tests (100% Core Coverage)
+
+---
+
 ## ⚡ Core Architecture
 
 The quantitative execution pipeline operates in four closed-loop stages:
@@ -107,7 +117,7 @@ The quantitative execution pipeline operates in four closed-loop stages:
 | **Broker & Market Data** | Alpaca Trading API & Market Data (`alpaca-py`) |
 | **AI Inference** | Featherless.ai Serverless Open Reasoning Models (Qwen 2.5 72B, Llama 3.3) |
 | **Frontend UI** | React 19, TypeScript, Vite, React Router v7, HTML5 Canvas |
-| **Testing & Quality** | Pytest, Pytest-Asyncio, Ruff, MyPy (95 passing tests) |
+| **Testing & Quality** | Pytest, Pytest-Asyncio, Ruff, MyPy (98 passing tests) |
 | **Deployment** | Docker, Fly.io, Persistent Encrypted Volumes |
 
 ---
@@ -210,7 +220,7 @@ pytest
 ```
 
 ```text
-======================= 95 passed, 1 skipped in 41.88s =======================
+======================= 98 passed, 1 skipped in 31.42s =======================
 ```
 
 ---
