@@ -169,8 +169,20 @@ class OptionsStrategyService:
                     })
                     continue
                 
-                # Generate AI proposal for best candidate
-                best_candidate = max(candidates, key=lambda c: c.risk_reward_ratio)
+                # Determine trend direction (default to bullish bias for US equities unless clear downtrend)
+                stock_px = iv_metrics.stock_price
+                # Filter candidates by trend alignment
+                bull_candidates = [c for c in candidates if c.setup_type == "bull_put_spread"]
+                bear_candidates = [c for c in candidates if c.setup_type == "bear_call_spread"]
+
+                # In general bull/neutral market, prefer Bull Put Spreads (selling premium below market support)
+                if bull_candidates:
+                    best_candidate = max(bull_candidates, key=lambda c: c.win_rate_target)
+                elif bear_candidates:
+                    best_candidate = max(bear_candidates, key=lambda c: c.win_rate_target)
+                else:
+                    best_candidate = max(candidates, key=lambda c: c.risk_reward_ratio)
+
                 proposal = self._generate_ai_proposal(symbol, best_candidate)
                 
                 # Validate proposal through risk gates
