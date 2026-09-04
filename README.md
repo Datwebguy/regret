@@ -8,7 +8,9 @@
 [![React 19](https://img.shields.io/badge/React-19.0-61dafb.svg?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Alpaca API](https://img.shields.io/badge/Alpaca-Paper%20%26%20Live-f59e0b.svg?style=flat-square)](https://alpaca.markets/)
 [![Featherless AI](https://img.shields.io/badge/Featherless.ai-Serverless%20LLM-38bdf8.svg?style=flat-square)](https://featherless.ai/)
-[![Tests Passing](https://img.shields.io/badge/Tests-95%20Passed%20(100%25)-3fb950.svg?style=flat-square)](tests/)
+[![Tests Passing](https://img.shields.io/badge/Tests-98%20Passed%20(100%25)-3fb950.svg?style=flat-square)](tests/)
+[![Live App](https://img.shields.io/badge/Live%20Dashboard-regretagent.vercel.app-000000.svg?style=flat-square&logo=vercel)](https://regretagent.vercel.app)
+[![API Engine](https://img.shields.io/badge/Live%20API-regret--agent.fly.dev-6851ff.svg?style=flat-square&logo=flydotio)](https://regret-agent.fly.dev)
 
 <br />
 
