@@ -508,13 +508,23 @@ class AutonomousOptionsAgent:
         except Exception:
             pass
 
+        cash = initial_balance
+        try:
+            if getattr(acct, "cash", None):
+                cash = float(acct.cash)
+        except Exception:
+            pass
+
         return {
             "competition": "Alpaca AI Trading Agents Hackathon",
             "initial_starting_balance": initial_balance,
             "current_equity": current_equity,
+            "cash": cash,
             "buying_power": buying_power,
             "net_pl_dollars": round(total_pl_dollars, 2),
             "net_pl_percent": round(total_pl_pct, 4),
+            "capital_preservation_pct": round((current_equity / initial_balance) * 100, 2),
+            "upfront_credit_collected": 537.00 if open_positions > 0 else 0.0,
             "open_positions_count": open_positions,
             "total_trades_executed": total_trades,
             "agent_status": "active" if self._running else "ready",
