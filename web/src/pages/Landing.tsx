@@ -163,18 +163,20 @@ export default function Landing() {
             style={{
               background: "#0d1117",
               border: "1.5px solid #21262d",
-              borderRadius: "20px",
-              padding: "26px",
+              borderRadius: "12px",
+              padding: "22px",
               color: "#f0f6fc",
               fontFamily: "var(--mono)",
-              boxShadow: "0 25px 50px -12px rgba(0,0,0,0.6)",
-              minWidth: "360px",
+              boxShadow: "0 20px 40px -10px rgba(0,0,0,0.5)",
+              width: "100%",
+              maxWidth: "460px",
+              boxSizing: "border-box",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #21262d", paddingBottom: "12px", marginBottom: "18px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #21262d", paddingBottom: "10px", marginBottom: "16px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <span style={{ fontSize: "20px", fontWeight: "900", letterSpacing: "0.15em", color: "#38bdf8" }}>REGRET</span>
-                <span style={{ fontSize: "10px", background: "rgba(34, 197, 94, 0.15)", color: "#3fb950", border: "1px solid rgba(34, 197, 94, 0.3)", padding: "2px 8px", borderRadius: "10px", fontWeight: "700" }}>
+                <span style={{ fontSize: "18px", fontWeight: "900", letterSpacing: "0.12em", color: "#38bdf8" }}>REGRET</span>
+                <span style={{ fontSize: "10px", background: "rgba(34, 197, 94, 0.15)", color: "#3fb950", border: "1px solid rgba(34, 197, 94, 0.3)", padding: "2px 8px", borderRadius: "6px", fontWeight: "700" }}>
                   ● LIVE ON ALPACA
                 </span>
               </div>
@@ -202,59 +204,66 @@ export default function Landing() {
             </div>
 
             {/* Premium Cash & Capital Grid */}
-            <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: "14px", marginBottom: "16px" }}>
-              <div style={{ background: "rgba(34, 197, 94, 0.08)", border: "1px solid rgba(34, 197, 94, 0.25)", borderRadius: "12px", padding: "12px 14px" }}>
-                <div style={{ fontSize: "10px", color: "#3fb950", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: "700" }}>UPFRONT PREMIUM CASH</div>
-                <div style={{ fontSize: "28px", fontWeight: "900", color: "#3fb950", lineHeight: 1.1, marginTop: "4px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "12px" }}>
+              <div style={{ background: "rgba(34, 197, 94, 0.08)", border: "1px solid rgba(34, 197, 94, 0.25)", borderRadius: "8px", padding: "10px 12px" }}>
+                <div style={{ fontSize: "10px", color: "#3fb950", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: "700" }}>UPFRONT CASH PREMIUM</div>
+                <div style={{ fontSize: "24px", fontWeight: "900", color: "#3fb950", lineHeight: 1.1, marginTop: "4px" }}>
                   +$537.00
                 </div>
-                <div style={{ fontSize: "11px", color: "#8b949e", marginTop: "4px" }}>
+                <div style={{ fontSize: "10px", color: "#8b949e", marginTop: "4px" }}>
                   Cash: <strong style={{ color: "#f0f6fc" }}>${(stats?.cash ?? 100008.21).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
                 </div>
               </div>
 
-              <div style={{ background: "rgba(255, 255, 255, 0.03)", border: "1px solid #21262d", borderRadius: "12px", padding: "12px 14px", textAlign: "right" }}>
+              <div style={{ background: "rgba(255, 255, 255, 0.03)", border: "1px solid #21262d", borderRadius: "8px", padding: "10px 12px", textAlign: "right" }}>
                 <div style={{ fontSize: "10px", color: "#8b949e", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: "700" }}>PORTFOLIO EQUITY</div>
-                <div style={{ fontSize: "24px", fontWeight: "900", color: "#f0f6fc", lineHeight: 1.1, marginTop: "4px" }}>
+                <div style={{ fontSize: "22px", fontWeight: "900", color: "#f0f6fc", lineHeight: 1.1, marginTop: "4px" }}>
                   ${equity.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
-                <div style={{ fontSize: "11px", color: "#3fb950", marginTop: "4px", fontWeight: "700" }}>
+                <div style={{ fontSize: "10px", color: "#3fb950", marginTop: "4px", fontWeight: "700" }}>
                   99.3% Capital Preserved
                 </div>
               </div>
             </div>
 
-            {/* Strategy Status & Defined Risk Hedge Banner */}
-            <div style={{ background: "rgba(56, 189, 248, 0.08)", border: "1px solid rgba(56, 189, 248, 0.2)", borderRadius: "10px", padding: "8px 12px", marginBottom: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "11px" }}>
-              <span style={{ color: "#38bdf8", fontWeight: "700" }}>🛡️ 100% Defined-Risk Spreads</span>
-              <span style={{ color: "#8b949e" }}>5 Spreads · 10 Hedged Legs</span>
+            {/* Open Mark-to-Market vs Risk Protected Banner */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "10px", marginBottom: "12px" }}>
+              <div style={{ background: "rgba(255, 255, 255, 0.02)", border: "1px solid #21262d", borderRadius: "8px", padding: "8px 10px", fontSize: "10px" }}>
+                <div style={{ color: "#8b949e", textTransform: "uppercase", fontWeight: "700" }}>OPEN MARK (THETA)</div>
+                <div style={{ fontSize: "14px", fontWeight: "800", color: "#f59e0b", marginTop: "2px" }}>-$199.00</div>
+                <div style={{ color: "#64748b", fontSize: "9px", marginTop: "2px" }}>Decays to $0 at expiry</div>
+              </div>
+              <div style={{ background: "rgba(56, 189, 248, 0.08)", border: "1px solid rgba(56, 189, 248, 0.2)", borderRadius: "8px", padding: "8px 10px", fontSize: "10px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <div style={{ color: "#38bdf8", fontWeight: "800" }}>🛡️ 100% DEFINED-RISK</div>
+                <div style={{ color: "#94a3b8", fontSize: "10px", marginTop: "2px" }}>5 Spreads · 10 Hedged Legs</div>
+              </div>
             </div>
 
             {/* Bottom 5 Stat Badges */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "6px", borderTop: "1px solid #21262d", paddingTop: "14px", textAlign: "center" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "4px", borderTop: "1px solid #21262d", paddingTop: "12px", textAlign: "center" }}>
               <div>
                 <div style={{ fontSize: "9px", color: "#8b949e", textTransform: "uppercase", fontWeight: "700" }}>CYCLES</div>
-                <div style={{ fontSize: "15px", fontWeight: "800", color: "#f0f6fc", marginTop: "2px" }}>142</div>
+                <div style={{ fontSize: "14px", fontWeight: "800", color: "#f0f6fc", marginTop: "2px" }}>142</div>
               </div>
               <div>
                 <div style={{ fontSize: "9px", color: "#8b949e", textTransform: "uppercase", fontWeight: "700" }}>SPREADS</div>
-                <div style={{ fontSize: "15px", fontWeight: "800", color: "#f0f6fc", marginTop: "2px" }}>{spreadCount}</div>
+                <div style={{ fontSize: "14px", fontWeight: "800", color: "#f0f6fc", marginTop: "2px" }}>{spreadCount}</div>
               </div>
               <div>
                 <div style={{ fontSize: "9px", color: "#8b949e", textTransform: "uppercase", fontWeight: "700" }}>LEGS</div>
-                <div style={{ fontSize: "15px", fontWeight: "800", color: "#38bdf8", marginTop: "2px" }}>{positionsCount}</div>
+                <div style={{ fontSize: "14px", fontWeight: "800", color: "#38bdf8", marginTop: "2px" }}>{positionsCount}</div>
               </div>
               <div>
                 <div style={{ fontSize: "9px", color: "#8b949e", textTransform: "uppercase", fontWeight: "700" }}>GATES</div>
-                <div style={{ fontSize: "15px", fontWeight: "800", color: "#3fb950", marginTop: "2px" }}>6 HARD</div>
+                <div style={{ fontSize: "14px", fontWeight: "800", color: "#3fb950", marginTop: "2px" }}>6 HARD</div>
               </div>
               <div>
                 <div style={{ fontSize: "9px", color: "#8b949e", textTransform: "uppercase", fontWeight: "700" }}>VERIFIED</div>
-                <div style={{ fontSize: "15px", fontWeight: "800", color: "#3fb950", marginTop: "2px" }}>ALPACA</div>
+                <div style={{ fontSize: "14px", fontWeight: "800", color: "#3fb950", marginTop: "2px" }}>ALPACA</div>
               </div>
             </div>
 
-            <div style={{ marginTop: "14px", paddingTop: "10px", borderTop: "1px dashed #21262d", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "10px", color: "#8b949e" }}>
+            <div style={{ marginTop: "12px", paddingTop: "8px", borderTop: "1px dashed #21262d", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "10px", color: "#8b949e" }}>
               <span>marked by the broker (Alpaca) · Paper Trading</span>
               <span>{lastSync ? `Synced: ${lastSync}` : "Live"}</span>
             </div>
